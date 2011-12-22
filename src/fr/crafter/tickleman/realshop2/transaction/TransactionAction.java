@@ -93,22 +93,22 @@ public class TransactionAction
 	{
 		if((sellStack != null)){
 			if(!RealEnchantment.enchantable(sellStack.getTypeId()).equals("NADA")){
-				if(sellStack.getEnchantments()!=null){
+				if(sellStack.getEnchantments().size()>0){
+					player.sendMessage(RealColor.message+"Impossible de vendre un item enchanté.");
 					return false;
 				}
-				ItemStack testDuration = new ItemStack(sellStack.getTypeId());
-				if(sellStack.getDurability()<testDuration.getDurability()){
+				if(sellStack.getDurability()>0){
+					player.sendMessage(RealColor.message+"Impossible de vendre un item cassé.");
 					return false;
 				}
 			}
 		}
 		if((buyStack != null)){
 			if(!RealEnchantment.enchantable(buyStack.getTypeId()).equals("NADA")){
-				if(buyStack.getEnchantments()!=null){
+				if(buyStack.getEnchantments().size()>0){
 					return false;
 				}
-				ItemStack testDuration = new ItemStack(buyStack.getTypeId());
-				if(buyStack.getDurability()<testDuration.getDurability()){
+				if(buyStack.getDurability()>0){
 					return false;
 				}
 			}
