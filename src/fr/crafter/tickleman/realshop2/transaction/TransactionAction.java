@@ -4,6 +4,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import fr.crafter.tickleman.realplugin.RealEnchantment;
 import fr.crafter.tickleman.realplugin.RealItemType;
 import fr.crafter.tickleman.realplugin.RealColor;
 import fr.crafter.tickleman.realplugin.RealItemStack;
@@ -55,7 +56,7 @@ public class TransactionAction
 				Player nearbyPlayer = (Player)entity;
 				nearbyPlayer.sendMessage(
 					RealColor.text
-					+ plugin.tr("[shop +name] +client " + side + " +item x+quantity (+linePrice) to +owner")
+					+ plugin.tr("+client " + side + " +item x+quantity (+linePrice)")
 					.replace("+client", RealColor.player + player.getName() + RealColor.text)
 					.replace("+item", RealColor.item + plugin.tr(itemType.getName()) + RealColor.text)
 					.replace("+linePrice", "" + RealColor.price + amount + RealColor.text)
@@ -90,16 +91,33 @@ public class TransactionAction
 	 */
 	public boolean canPay(Player player, Shop shop, ItemStack buyStack, ItemStack sellStack)
 	{
+		if((sellStack != null)){
+			if(!RealEnchantment.enchantable(sellStack.getTypeId()).equals("NADA")){
+				if(sellStack.getEnchantments()!=null){
+					return false;
+				}
+				ItemStack testDuration = new ItemStack(sellStack.getTypeId());
+				if(sellStack.getDurability()<testDuration.getDurability()){
+					return false;
+				}
+			}
+		}
+		if((buyStack != null)){
+			if(!RealEnchantment.enchantable(buyStack.getTypeId()).equals("NADA")){
+				if(buyStack.getEnchantments()!=null){
+					return false;
+				}
+				ItemStack testDuration = new ItemStack(buyStack.getTypeId());
+				if(buyStack.getDurability()<testDuration.getDurability()){
+					return false;
+				}
+			}
+		}
 		if ((buyStack != null) && !shop.canBuyItem(plugin, new RealItemStack(buyStack))) {
 			plugin.getLog().debug("can not buy item");
 			return false;
 		}
 		if ((sellStack != null) && !shop.canSellItem(plugin, new RealItemStack(sellStack))) {
-			plugin.getLog().debug("can not sell item");
-			return false;
-		}
-		ItemStack copystack = new ItemStack(sellStack.getTypeId());
-		if (sellStack.getDurability()<copystack.getDurability()) {
 			plugin.getLog().debug("can not sell item");
 			return false;
 		}
@@ -183,7 +201,7 @@ public class TransactionAction
 		if (shopPlayer != null) {
 			shopPlayer.sendMessage(
 				RealColor.text
-				+ plugin.tr("[shop +name] +client " + shopSide + " +item x+quantity (+linePrice) to you")
+				+ plugin.tr("+client " + shopSide + " +item x+quantity (+linePrice)")
 				.replace("+client", RealColor.player + player.getName() + RealColor.text)
 				.replace("+item", RealColor.item + plugin.tr(itemType.getName()) + RealColor.text)
 				.replace("+linePrice", "" + RealColor.price + amount + RealColor.text)
