@@ -98,6 +98,11 @@ public class TransactionAction
 			plugin.getLog().debug("can not sell item");
 			return false;
 		}
+		ItemStack copystack = new ItemStack(sellStack.getTypeId());
+		if (sellStack.getDurability()<copystack.getDurability()) {
+			plugin.getLog().debug("can not sell item");
+			return false;
+		}
 		Price buyPrice = (buyStack == null) ? null : calculatePrice(shop, buyStack);
 		Price sellPrice = (sellStack == null) ? null : calculatePrice(shop, sellStack);
 		if (
