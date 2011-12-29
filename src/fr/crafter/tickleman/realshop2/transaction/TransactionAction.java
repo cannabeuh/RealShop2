@@ -53,6 +53,7 @@ public class TransactionAction
 	) {
 		for (Entity entity : player.getNearbyEntities(5.0d, 5.0d, 5.0d)) {
 			if (entity instanceof Player) {
+				if(!player.getName().equals(shop.getPlayerName())){
 				Player nearbyPlayer = (Player)entity;
 				nearbyPlayer.sendMessage(
 					RealColor.text
@@ -66,6 +67,7 @@ public class TransactionAction
 					.replace("+quantity", "" + RealColor.quantity + itemStack.getAmount() + RealColor.text)
 					.replace("  ", " ").replace(" ]", "]").replace("[ ", "[")
 				);
+				}
 			}
 		}
 	}
